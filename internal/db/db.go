@@ -23,10 +23,12 @@ func InitDB() *DB {
 }
 
 func (DB *DB) Migrate() {
-	log.Println("Runing migration")
+	log.Println("Running migration")
 	err := DB.Db.AutoMigrate(&models.User{})
 	if err != nil {
-		log.Println("An error occurred during migration:", err)
+		log.Fatalf("An error occurred during migration: %v", err)
+	} else {
+		log.Println("Migration completed successfully")
 	}
 
 }
