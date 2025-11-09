@@ -1,0 +1,17 @@
+# ignore local build artifacts and VCS
+bin/
+.env
+.DS_Store
+.git
+*.md
+*.log
+
+# Go build and cache
+*.exe
+*.test
+*.out
+vendor/
+
+# IDE/editor
+.vscode/
+*.swp
