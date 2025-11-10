@@ -1,5 +1,4 @@
 package migrate
 
-type Migrate interface{
-	
+type Migrate interface {
 }

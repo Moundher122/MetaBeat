@@ -30,5 +30,4 @@ func (DB *DB) Migrate() {
 	} else {
 		log.Println("Migration completed successfully")
 	}
-
 }
