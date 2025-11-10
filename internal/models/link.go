@@ -1,9 +1,8 @@
 package models
 
-import "gorm.io/gorm"
-
+import "metabeat/pkg/Base"
 type Link struct {
-	gorm.Model
+	Base.BaseModel
 	URL    string `gorm:"not null"`
 	Icon   string `gorm:"null"`
 	UserID uint   `gorm:"foreignKey;not null"`

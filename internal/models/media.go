@@ -1,9 +1,8 @@
 package models
 
-import "gorm.io/gorm"
-
+import "metabeat/pkg/Base"
 type Media struct {
-	gorm.Model
+	Base.BaseModel
 	FileUrl string `gorm:"not null"`
 	Size    string `gorm:"not null"`
 }

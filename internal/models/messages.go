@@ -1,9 +1,8 @@
 package models
 
-import "gorm.io/gorm"
-
+import "metabeat/pkg/Base"
 type Message struct {
-	gorm.Model
+	Base.BaseModel
 	Content string `gorm:"not null"`
 	UserID  uint   `gorm:"foreignKey;not null"`
 }
