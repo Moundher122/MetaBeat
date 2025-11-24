@@ -8,6 +8,7 @@ import (
 
 type BaseModel struct {
 	gorm.Model
+	ID        uint           `gorm:"primaryKey;autoIncrement"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 

@@ -3,7 +3,6 @@ package db
 import (
 	"log"
 	"metabeat/internal/models"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,7 +23,7 @@ func InitDB() *DB {
 
 func (DB *DB) Migrate() {
 	log.Println("Running migration")
-	err := DB.Db.AutoMigrate(&models.User{})
+	err := DB.Db.AutoMigrate(&models.User{}, &models.Media{}, &models.Link{}, &models.Message{})
 	if err != nil {
 		log.Fatalf("An error occurred during migration: %v", err)
 	} else {

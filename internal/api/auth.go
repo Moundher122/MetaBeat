@@ -1,26 +1,53 @@
 package api
+
 import (
-	"gorm.io/gorm"
+	"encoding/json"
+	"metabeat/internal/dto"
 	"metabeat/internal/models"
 	"net/http"
-	"encoding/json"
+
+	"github.com/go-playground/validator/v10"
 )
 
-func RegisterHandler(DB *gorm.DB, w http.ResponseWriter, r *http.Request) (models.User, error) {
-	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// 1. Decode JSON into DTO
+	var body dto.RegisterDto
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "invalid JSON: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// 2. Validate DTO
+	v := validator.New()
+	if err := v.Struct(body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return models.User{}, err
+		return
 	}
-	if err := DB.Create(&user).Error; err != nil {
-	if err != nil {
-		return models.User{}, err
+
+	// 3. Map DTO -> model
+	user := models.User{
+		Email:    body.Email,
+		Password: body.Password,
+		Username: body.Username,
 	}
-	return user, nil
-}
-	result := DB.Create(&user)
-	if result.Error != nil {
-		return models.User{}, result.Error
+	if err := h.DB.Db.Create(&user).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	return user, nil
+
+	w.Header().Set("Content-Type", "application/js on")
+	w.WriteHeader(http.StatusCreated)
+	response := dto.UserDto{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Bio:      user.Bio,
+		BgSong:   user.BgSong,
+	}
+	json.NewEncoder(w).Encode(response)
 }

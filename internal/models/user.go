@@ -6,9 +6,10 @@ import (
 
 type User struct {
 	Base.BaseModel
-	Username string `gorm:"unique;not null"`
+	Username string `gorm:"unique;not null;primaryKey"`
 	Email    string `gorm:"unique;not null"`
 	Password string `gorm:"not null"`
 	Bio      string `gorm:"null"`
 	BgSong   string `gorm:"null"`
 }
+		
