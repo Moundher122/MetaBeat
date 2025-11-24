@@ -35,6 +35,7 @@ func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		Password: body.Password,
 		Username: body.Username,
 	}
+	user.HashPassword()
 	if err := h.DB.Db.Create(&user).Error; err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
