@@ -2,12 +2,12 @@ package models
 
 import (
 	"metabeat/pkg/Base"
-
-	"golang.org/x/crypto/bcrypt"
+	"metabeat/pkg/Hash"
 )
 
 type User struct {
 	Base.BaseModel
+	hash.Hash
 	Username string `gorm:"unique;not null;primaryKey"`
 	Email    string `gorm:"unique;not null"`
 	Password string `gorm:"not null"`
@@ -15,10 +15,3 @@ type User struct {
 	BgSong   string `gorm:"null"`
 }
 
-func (u *User) HashPassword() {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		panic(err)
-	}
-	u.Password = string(hashedPassword)
-}
