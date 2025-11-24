@@ -9,9 +9,9 @@ import (
 func main() {
 	DB := db.InitDB()
 	DB.Migrate()
-	http.HandleFunc("/health", api.HealthCheckHandler)
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		api.RegisterHandler(DB.Db, w, r)
-	})
+	Handler := &api.Handler{DB: DB}
+	http.HandleFunc("/health", Handler.HealthCheckHandler)
+	http.HandleFunc("/register", Handler.RegisterHandler)
+
 	http.ListenAndServe(":8080", nil)
 }
