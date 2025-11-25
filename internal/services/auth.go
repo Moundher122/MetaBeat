@@ -1,12 +1,9 @@
-package api
-
+package services
 import (
 	"encoding/json"
 	"metabeat/internal/dto"
 	"metabeat/internal/models"
 	"net/http"
-
-	"github.com/go-playground/validator/v10"
 )
 
 func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +16,7 @@ func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	v := validator.New()
+	v := h.Validator
 	if err := v.Struct(body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
