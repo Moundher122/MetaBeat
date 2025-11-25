@@ -7,6 +7,11 @@ type RegisterDto struct {
 	Bio      string `json:"bio"`
 	BgSong   string `json:"bg_song"`
 }
+type LoginDto struct {
+	Email    *string `json:"email" validate:"email"`
+	Password string  `json:"password" vlidate:"required,min=8"`
+	Username *string `json:"username"`
+}
 
 type UserDto struct {
 	ID       uint   `json:"id"`
