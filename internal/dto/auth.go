@@ -12,7 +12,6 @@ type LoginDto struct {
 	Password string  `json:"password" vlidate:"required,min=8"`
 	Username *string `json:"username"`
 }
-
 type UserDto struct {
 	ID       uint   `json:"id"`
 	Email    string `json:"email"`
