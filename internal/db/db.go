@@ -23,7 +23,7 @@ func InitDB() *DB {
 
 func (DB *DB) Migrate() {
 	log.Println("Running migration")
-	err := DB.Db.AutoMigrate(&models.User{}, &models.Media{}, &models.Link{}, &models.Message{})
+	err := DB.Db.AutoMigrate(&models.User{}, &models.Media{}, &models.Link{}, &models.Message{}, &models.View{}, &models.Theme{})
 	if err != nil {
 		log.Fatalf("An error occurred during migration: %v", err)
 	} else {

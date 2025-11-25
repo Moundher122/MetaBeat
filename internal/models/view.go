@@ -6,7 +6,7 @@ import (
 
 type View struct {
 	Base.BaseModel
-	UserID    User   `gorm:"foreignKey;not null"`
+	UserID    *uint  `gorm:"foreignKey;null"`
 	Origin    string `gorm:"not null"`
 	IPAddress string `gorm:"not null"`
 }
