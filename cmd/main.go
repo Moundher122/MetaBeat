@@ -14,5 +14,5 @@ func main() {
 	DB.Migrate()
 	mux := http.NewServeMux()
 	endpoint.RegisterEndpoints(mux, &services.Handler{DB: DB, Validator: validator.New()})
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8081", mux)
 }

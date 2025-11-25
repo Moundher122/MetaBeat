@@ -5,6 +5,7 @@ import (
 	"metabeat/internal/dto"
 	"metabeat/internal/models"
 	"net/http"
+	"gorm.io/gorm"
 )
 
 func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -53,5 +54,36 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	json.NewEncoder(w).Encode("test")
+	var user models.User
+	if body.Email != nil {
+		if err := gorm.G[models.User](h.DB.Db).Where("email = ?", *body.Email); err != nil {
+			http.Error(w, "invalid credentials", http.StatusUnauthorized)
+			return
+		}
+	} else if body.Username != nil {
+		if err := gorm.G[models.User](h.DB.Db).Where("username = ?", *body.Username); err != nil {
+			http.Error(w, "invalid credentials", http.StatusUnauthorized)
+			return
+		}
+	} else {
+		http.Error(w, "either email or username must be provided", http.StatusBadRequest)
+		return
+	}
+	if !user.CheckWord(body.Password, user.Password) {
+		http.Error(w, "invalid credentials", http.StatusUnauthorized)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	response := dto.UserDto{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Bio:      user.Bio,
+		BgSong:   user.BgSong,
+	}
+	json.NewEncoder(w).Encode(response)
+
 }
+func (h *Handler) LogoutHandler(w http.ResponseWriter, r *http.Request) {}
+

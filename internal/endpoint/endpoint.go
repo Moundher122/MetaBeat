@@ -7,6 +7,6 @@ import (
 )
 
 func RegisterEndpoints(mux *http.ServeMux, handler *services.Handler) {
+	v1.HealthEndpoints(mux, handler)
 	v1.AuthEndpoints(mux, handler)
-	
 }
