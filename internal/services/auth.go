@@ -2,9 +2,11 @@ package services
 
 import (
 	"encoding/json"
+	"fmt"
 	"metabeat/internal/dto"
 	"metabeat/internal/models"
 	"net/http"
+
 	"gorm.io/gorm"
 )
 
@@ -56,19 +58,12 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	var user models.User
 	if body.Email != nil {
-		if err := gorm.G[models.User](h.DB.Db).Where("email = ?", *body.Email); err != nil {
-			http.Error(w, "invalid credentials", http.StatusUnauthorized)
-			return
-		}
-	} else if body.Username != nil {
-		if err := gorm.G[models.User](h.DB.Db).Where("username = ?", *body.Username); err != nil {
-			http.Error(w, "invalid credentials", http.StatusUnauthorized)
-			return
-		}
+		user := gorm.G[models.User](h.DB.Db).Where("email = ?", *body.Email)
+		fmt.Println(user)
 	} else {
-		http.Error(w, "either email or username must be provided", http.StatusBadRequest)
-		return
+
 	}
+	fmt.Println(user.Password, body.Password)
 	if !user.CheckWord(body.Password, user.Password) {
 		http.Error(w, "invalid credentials", http.StatusUnauthorized)
 		return
@@ -86,4 +81,3 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 func (h *Handler) LogoutHandler(w http.ResponseWriter, r *http.Request) {}
-

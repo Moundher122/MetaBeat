@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"metabeat/internal/db"
 	"metabeat/internal/endpoint"
 	"metabeat/internal/services"
@@ -14,5 +15,8 @@ func main() {
 	DB.Migrate()
 	mux := http.NewServeMux()
 	endpoint.RegisterEndpoints(mux, &services.Handler{DB: DB, Validator: validator.New()})
-	http.ListenAndServe(":8081", mux)
+	err := http.ListenAndServe(":8080", mux)
+	if err != nil {
+		fmt.Println("Error starting server:", err)
+	}
 }
